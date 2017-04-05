@@ -83,4 +83,27 @@ describe('Cookies module', function() {
 			assert.equal(result, "item1=hello%20there;item2=hello%20there%20dude;item3=goodbye%20there;item4=ouch%20that%20hurt;item5=good%20night");
 		});
 	});
+
+	describe('Test merge method', function() {
+
+		it('Should merge source json object into base json object', function() {
+			var base = {
+				item1: "hello there",
+				item2: "hello there dude",
+				item3: "goodbye there",
+				item4: "ouch that hurt",
+				item5: "good night"
+			};
+
+			var source = {
+				item1: "goodbye there",
+				item6: "rock it dude",
+				item7: "ZZZZzzzzzzz"
+			};
+
+			var result = cookies.merge(base, source);
+			assert.equal(result.item1, "goodbye there");
+			assert.equal(result.item6, "rock it dude");
+		});
+	});
 });

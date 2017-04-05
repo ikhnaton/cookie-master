@@ -43,6 +43,15 @@ function Cookies()
 
 		return result;
 	}
+
+	this.merge = function(base, source)
+	{
+		_.forEach(source, function(value, key) {
+			base[key] = value;
+		})
+
+		return base;
+	}
 }
 
 module.exports =  new Cookies();
