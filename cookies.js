@@ -1,56 +1,47 @@
-var _ = require('lodash');
+const _ = require('lodash');
+const Cookie = require('./cookie')
 
 function Cookies()
 {
 	this.toJson = function(cookies)
 	{
-		if (Object.prototype.toString.call(cookies) !== '[object Array]')
-		{
-			cookies = cookies.split(";");
-		}
+		if (_.isString(cookies)) return (new Cookie(cookies)).toJSON();
 
-		var result = {};
+		return cookies.map(cookieStr => {
+			return (new Cookie(cookieStr)).toJSON();
+		});
+	}
 
-		cookies.forEach(
-			function ( cookie ) {
-				var parts = [cookie.substring(0,cookie.indexOf("=")),cookie.substring(cookie.indexOf("=") + 1)];
-				result[parts[0]] = parts[1];
-			}
-		);
+	this.toCookies = function(cookies)
+	{
+		if (_.isString(cookies)) return new Cookie(cookies);
 
-		return result;
+		return cookies.map(cookieStr => {
+			return new Cookie(cookieStr);
+		});
 	}
 
 	this.toCookieString = function(cookies)
 	{
-		if (Object.prototype.toString.call(cookies) !== '[object Object]')
+
+		if (_.isArray(cookies))
 		{
-			cookies = this.toJson(cookies)
+			return cookies.reduce((str, cookie) => {
+				str += (new Cookie(cookie)).toString();
+				return str;
+			}, "");
 		}
-
-		var result = "";
-		_.forEach(cookies, function(value, key) {
-			if (result.length > 0) { result += ";"}
-			result += key + "=" + value;
-		});
-
-		return result;
+		else if (_.isObject(cookies))
+		{
+			return (new Cookie(cookies)).toString();
+		}
 	}
 
-	this.toCookieStringUrlEncoded = function(jsonObject)
+	this.toCookieStringUrlEncoded = function(cookies)
 	{
-		var result = encodeURI(this.toCookieString(jsonObject));
+		var result = encodeURI(this.toCookieString(cookies));
 
 		return result;
-	}
-
-	this.merge = function(base, source)
-	{
-		_.forEach(source, function(value, key) {
-			base[key] = value;
-		})
-
-		return base;
 	}
 }
 
