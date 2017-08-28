@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const Cookie = require('./cookie')
+const Cookie = require('./cookie');
 
 function Cookies()
 {
@@ -57,4 +57,5 @@ function Cookies()
 	}
 }
 
-module.exports =  new Cookies();
+exports = module.exports =  new Cookies();
+exports.Cookie = require('./cookie');
