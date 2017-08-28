@@ -27,13 +27,25 @@ function Cookies()
 		if (_.isArray(cookies))
 		{
 			return cookies.reduce((str, cookie) => {
-				str += (new Cookie(cookie)).toString();
+				str += (new Cookie(cookie)).toString() + ' ';
 				return str;
 			}, "");
 		}
 		else if (_.isObject(cookies))
 		{
 			return (new Cookie(cookies)).toString();
+		}
+	}
+
+	this.toSetCookieArray = function(cookies)
+	{
+		if (_.isArray(cookies))
+		{
+			return cookies.map(cookie => (new Cookie(cookie)).toFullString() );
+		}
+		else if (_.isObject(cookies))
+		{
+			return (new Cookie(cookies)).toFullString();
 		}
 	}
 

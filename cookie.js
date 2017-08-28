@@ -14,18 +14,19 @@ class Cookie {
 		this.httpOnly = null;
 		this.sameSite = null;
 
+//		if ((obj != null) && (obj instanceof Cookie)) this.parseFromString(obj.toFullString());
 		if ((obj != null) && (_.isObject(obj))) this.parseFromObject(obj);
 		if ((obj != null) && (_.isString(obj))) this.parseFromString(obj);
 	}
 
 	toString()
 	{
-		return `${this.name}=${this.value}; `;
+		return `${this.name}=${this.value};`;
 	}
 
 	toFullString()
 	{
-		let c = this.toString();
+		let c = this.toString() + ' ';
 		if (this.expires != null) c += `Expires=${(_.isDate(this.expires))?this.expires.toGMTString():(new Date(this.expires).toGMTString())}; `;
 		if (this.maxAge != null) c+= `Max-Age=${this.maxAge}; `;
 
@@ -39,7 +40,7 @@ class Cookie {
 		if (this.httpOnly == true) c+= `HttpOnly; `;
 		if (this.sameSite != null) c+= `SameSite=${sameSite}; `;
 
-		return c;
+		return c.trim();
 	}
 
 	parseFromString(input)

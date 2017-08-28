@@ -109,4 +109,37 @@ describe('Cookies module', function() {
 		});
 	});
 
+	describe('Test handling Cookie objects', function() {
+
+		it('Should convert an array of cookie strings to an array of cookie objects, then convert the cookie objects to an array of Strings using Cookie objects', function() {
+			var start = [
+				'JSESSIONID=0000MgZyuP8CQGMz6Jnc5xFpOu8:1a0dgl3k4; Path=/services/partners/epricer/v2/bpgui; HttpOnly',
+				'epricer_contextid=MgZyuP8CQGMz6Jnc5xFpOu8; Expires=Sun, 24-Sep-17 20:50:30 GMT; Path=/services/partners/epricer/v2/api',
+				'epricer_id=2700000261; Expires=Sun, 24-Sep-17 20:50:30 GMT; Path=/services/partners/epricer/v2/api',
+				'epricer_email=rjalowiec@kc.rr.com; Expires=Sun, 24-Sep-17 20:50:30 GMT; Path=/services/partners/epricer/v2/api',
+				'epricer_urlredirection=https://wwwbeta-2.toronto.ca.ibm.com/partnerworld/commerce/programs/servers/EpricerRedirectionServlet.wss?command=epricerRedirection; Expires=Sun, 24-Sep-17 20:50:30 GMT; Path=/services/partners/epricer/v2/api'
+			];
+
+			var midpoint = cookies.toCookies(start);
+			var result = midpoint.map(cookie => cookie.toFullString());
+			assert.equal(result[0], 'JSESSIONID=0000MgZyuP8CQGMz6Jnc5xFpOu8:1a0dgl3k4; Path=/services/partners/epricer/v2/bpgui; HttpOnly;');
+			assert.equal(result[1], 'epricer_contextid=MgZyuP8CQGMz6Jnc5xFpOu8; Expires=Sun, 24 Sep 2017 20:50:30 GMT; Path=/services/partners/epricer/v2/api;');
+		});
+
+		it('Should convert an array of cookie strings to an array of cookie objects, then convert the cookie objects to an array of Strings using Cookies interface', function() {
+			var start = [
+				'JSESSIONID=0000MgZyuP8CQGMz6Jnc5xFpOu8:1a0dgl3k4; Path=/services/partners/epricer/v2/bpgui; HttpOnly',
+				'epricer_contextid=MgZyuP8CQGMz6Jnc5xFpOu8; Expires=Sun, 24-Sep-17 20:50:30 GMT; Path=/services/partners/epricer/v2/api',
+				'epricer_id=2700000261; Expires=Sun, 24-Sep-17 20:50:30 GMT; Path=/services/partners/epricer/v2/api',
+				'epricer_email=rjalowiec@kc.rr.com; Expires=Sun, 24-Sep-17 20:50:30 GMT; Path=/services/partners/epricer/v2/api',
+				'epricer_urlredirection=https://wwwbeta-2.toronto.ca.ibm.com/partnerworld/commerce/programs/servers/EpricerRedirectionServlet.wss?command=epricerRedirection; Expires=Sun, 24-Sep-17 20:50:30 GMT; Path=/services/partners/epricer/v2/api'
+			];
+
+			var midpoint = cookies.toCookies(start);
+			var result = cookies.toSetCookieArray(midpoint);
+			assert.equal(result[0], 'JSESSIONID=0000MgZyuP8CQGMz6Jnc5xFpOu8:1a0dgl3k4; Path=/services/partners/epricer/v2/bpgui; HttpOnly;');
+			assert.equal(result[1], 'epricer_contextid=MgZyuP8CQGMz6Jnc5xFpOu8; Expires=Sun, 24 Sep 2017 20:50:30 GMT; Path=/services/partners/epricer/v2/api;');
+		});
+	});
+
 });
