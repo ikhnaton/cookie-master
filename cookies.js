@@ -33,7 +33,18 @@ function Cookies()
 		}
 		else if (_.isObject(cookies))
 		{
-			return (new Cookie(cookies)).toString();
+			if ((cookies.name != null) && (cookies.value != null))
+			{
+				return (new Cookie(cookies)).toString();
+			}
+			else
+			{
+				let newCookies = [];
+				_.forEach(cookies, (value, key) => {
+					newCookies.push(new Cookie(`${key}=${value}`));
+				});
+				return this.toCookieString(newCookies);
+			}
 		}
 	}
 
