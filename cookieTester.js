@@ -141,18 +141,18 @@ describe('Cookies module', function() {
 			assert.equal(result[1], 'epricer_contextid=MgZyuP8CQGMz6Jnc5xFpOu8; Expires=Sun, 24 Sep 2017 20:50:30 GMT; Path=/services/partners/epricer/v2/api;');
 		});
 	});
-
-	describe('Test working with single Cookie', function() {
-
-		it('Should convert an array of cookie strings to an array of cookie objects, then convert the cookie objects to an array of Strings using Cookie objects', function() {
-			var start =
-				'epricer_urlredirection=https://wwwbeta-2.toronto.ca.ibm.com/partnerworld/commerce/programs/servers/EpricerRedirectionServlet.wss?command=epricerRedirection; Expires=Sun, 24-Sep-17 20:50:30 GMT; Path=/services/partners/epricer/v2/api; HttpOnly;';
-
-			var midpoint = cookies.toCookies(start);
-			var result = midpoint.map(cookie => cookie.toFullString());
-			assert.equal(result[0], 'JSESSIONID=0000MgZyuP8CQGMz6Jnc5xFpOu8:1a0dgl3k4; Path=/services/partners/epricer/v2/bpgui; HttpOnly;');
-			assert.equal(result[1], 'epricer_contextid=MgZyuP8CQGMz6Jnc5xFpOu8; Expires=Sun, 24 Sep 2017 20:50:30 GMT; Path=/services/partners/epricer/v2/api;');
-		});
-
-	});
+//
+//	describe('Test working with single Cookie', function() {
+//
+//		it('Should convert an array of cookie strings to an array of cookie objects, then convert the cookie objects to an array of Strings using Cookie objects', function() {
+//			var start =
+//				'epricer_urlredirection=https://wwwbeta-2.toronto.ca.ibm.com/partnerworld/commerce/programs/servers/EpricerRedirectionServlet.wss?command=epricerRedirection; Expires=Sun, 24-Sep-17 20:50:30 GMT; Path=/services/partners/epricer/v2/api; HttpOnly;';
+//
+//			var midpoint = cookies.toCookies(start);
+//			var result = midpoint.map(cookie => cookie.toFullString());
+//			assert.equal(result[0], 'JSESSIONID=0000MgZyuP8CQGMz6Jnc5xFpOu8:1a0dgl3k4; Path=/services/partners/epricer/v2/bpgui; HttpOnly;');
+//			assert.equal(result[1], 'epricer_contextid=MgZyuP8CQGMz6Jnc5xFpOu8; Expires=Sun, 24 Sep 2017 20:50:30 GMT; Path=/services/partners/epricer/v2/api;');
+//		});
+//
+//	});
 });
