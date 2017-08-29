@@ -12,6 +12,28 @@ function Cookies()
 		});
 	}
 
+	this.toSimpleJSON = function(cookies)
+	{
+		let myCookies = null;
+		if (!_.isArray(cookies))
+		{
+			let newCookies = [];
+			_.forEach(cookies, (value, key) => {
+				newCookies.push(new Cookie(`${key}=${value}`));
+			});
+			myCookies = newCookies.splice();
+		}
+		else
+		{
+			myCookies = this.toCookies(cookies);
+		}
+
+		return myCookies.reduce((ary, item) => {
+			ary[item.name] = item.value;
+			return ary;
+		}, {});
+	}
+
 	this.toCookies = function(cookies)
 	{
 		if (_.isString(cookies)) return new Cookie(cookies);
