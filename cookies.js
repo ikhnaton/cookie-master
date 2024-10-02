@@ -1,57 +1,94 @@
-var _ = require('lodash');
+const _ = require('lodash');
+const Cookie = require('./cookie');
 
 function Cookies()
 {
 	this.toJson = function(cookies)
 	{
-		if (Object.prototype.toString.call(cookies) !== '[object Array]')
+		if (_.isString(cookies)) return (new Cookie(cookies)).toJSON();
+
+		return cookies.map(cookieStr => {
+			return (new Cookie(cookieStr)).toJSON();
+		});
+	}
+
+	this.toSimpleJSON = function(cookies)
+	{
+		let myCookies = null;
+		if (!_.isArray(cookies))
 		{
-			cookies = cookies.split(";");
+			let newCookies = [];
+			_.forEach(cookies, (value, key) => {
+				newCookies.push(new Cookie(`${key}=${value}`));
+			});
+			myCookies = newCookies.splice();
+		}
+		else
+		{
+			myCookies = this.toCookies(cookies);
 		}
 
-		var result = {};
+		return myCookies.reduce((ary, item) => {
+			ary[item.name] = item.value;
+			return ary;
+		}, {});
+	}
 
-		cookies.forEach(
-			function ( cookie ) {
-				var parts = [cookie.substring(0,cookie.indexOf("=")),cookie.substring(cookie.indexOf("=") + 1)];
-				result[parts[0]] = parts[1];
-			}
-		);
+	this.toCookies = function(cookies)
+	{
+		if (_.isString(cookies)) return new Cookie(cookies);
 
-		return result;
+		return cookies.map(cookieStr => {
+			return new Cookie(cookieStr);
+		});
 	}
 
 	this.toCookieString = function(cookies)
 	{
-		if (Object.prototype.toString.call(cookies) !== '[object Object]')
+
+		if (_.isArray(cookies))
 		{
-			cookies = this.toJson(cookies)
+			return cookies.reduce((str, cookie) => {
+				str += (new Cookie(cookie)).toString() + ' ';
+				return str;
+			}, "");
 		}
-
-		var result = "";
-		_.forEach(cookies, function(value, key) {
-			if (result.length > 0) { result += ";"}
-			result += key + "=" + value;
-		});
-
-		return result;
+		else if (_.isObject(cookies))
+		{
+			if ((cookies.name != null) && (cookies.value != null))
+			{
+				return (new Cookie(cookies)).toString();
+			}
+			else
+			{
+				let newCookies = [];
+				_.forEach(cookies, (value, key) => {
+					newCookies.push(new Cookie(`${key}=${value}`));
+				});
+				return this.toCookieString(newCookies);
+			}
+		}
 	}
 
-	this.toCookieStringUrlEncoded = function(jsonObject)
+	this.toSetCookieArray = function(cookies)
 	{
-		var result = encodeURI(this.toCookieString(jsonObject));
-
-		return result;
+		if (_.isArray(cookies))
+		{
+			return cookies.map(cookie => (new Cookie(cookie)).toFullString() );
+		}
+		else if (_.isObject(cookies))
+		{
+			return (new Cookie(cookies)).toFullString();
+		}
 	}
 
-	this.merge = function(base, source)
+	this.toCookieStringUrlEncoded = function(cookies)
 	{
-		_.forEach(source, function(value, key) {
-			base[key] = value;
-		})
+		var result = encodeURI(this.toCookieString(cookies));
 
-		return base;
+		return result;
 	}
 }
 
-module.exports =  new Cookies();
+exports = module.exports =  new Cookies();
+exports.Cookie = require('./cookie');
